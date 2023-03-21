@@ -64,6 +64,7 @@ class GameOverSubstate extends MusicBeatSubstate
 		FlxG.camera.target = null;
 
 		boyfriend.playAnim('firstDeath');
+		addVirtualPad(NONE, A_B);
 
 		var exclude:Array<Int> = [];
 
