@@ -15,7 +15,6 @@ import android.flixel.FlxButton;
 import android.flixel.FlxHitbox;
 import android.flixel.FlxVirtualPad;
 #end
-
 #if (haxe >= "4.0.0")
 enum abstract Action(String) to String from String
 {
@@ -383,7 +382,6 @@ class Controls extends FlxActionSet
 		setKeyboardScheme(scheme, false);
 	}
 	#end
-
 	
 Search or jump to…
 Pulls
@@ -428,26 +426,7 @@ import android.flixel.FlxVirtualPad;
 #if (haxe >= "4.0.0")
 enum abstract Action(String) to String from String
 {
-@@ -359,26 +363,157 @@
-		add(_note_down);
-		add(_note_upP);
-		add(_note_leftP);
-		add(_note_rightP);
-		add(_note_downP);
-		add(_note_upR);
-		add(_note_leftR);
-		add(_note_rightR);
-		add(_note_downR);
-		add(_accept);
-		add(_back);
-		add(_pause);
-		add(_reset);
-		for (action in digitalActions)
-			byName[action.name] = action;
-			
-		if (scheme == null)
-			scheme = None;
-		setKeyboardScheme(scheme, false);
+@@ -379,6 +383,137 @@ class Controls extends FlxActionSet
 	}
 	#end
 
@@ -792,7 +771,6 @@ enum abstract Action(String) to String from String
 		#end
 	}
 
-	
 	public function unbindKeys(control:Control, keys:Array<FlxKey>)
 	{
 		var copyKeys:Array<FlxKey> = keys.copy();
@@ -806,26 +784,7 @@ enum abstract Action(String) to String from String
 		forEachBound(control, function(action, _) removeKeys(action, copyKeys));
 		#end
 	}
-	#else
 
-	public function bindKeys(control:Control, keys:Array<FlxKey>)
-	{
-		#if (haxe >= "4.0.0")
-		inline forEachBound(control, (action, state) -> addKeys(action, keys, state));
-		#else
-		forEachBound(control, function(action, state) addKeys(action, keys, state));
-		#end
-	}
-
-	public function unbindKeys(control:Control, keys:Array<FlxKey>)
-	{
-		#if (haxe >= "4.0.0")
-		inline forEachBound(control, (action, _) -> removeKeys(action, keys));
-		#else
-		forEachBound(control, function(action, _) removeKeys(action, keys));
-		#end
-	}	
-	#end
 	inline static function addKeys(action:FlxActionDigital, keys:Array<FlxKey>, state:FlxInputState)
 	{
 		for (key in keys)
@@ -945,7 +904,26 @@ enum abstract Action(String) to String from String
 		}
 		#end
 	}
+#else
 
+	public function bindKeys(control:Control, keys:Array<FlxKey>)
+	{
+		#if (haxe >= "4.0.0")
+		inline forEachBound(control, (action, state) -> addKeys(action, keys, state));
+		#else
+		forEachBound(control, function(action, state) addKeys(action, keys, state));
+		#end
+	}
+
+	public function unbindKeys(control:Control, keys:Array<FlxKey>)
+	{
+		#if (haxe >= "4.0.0")
+		inline forEachBound(control, (action, _) -> removeKeys(action, keys));
+		#else
+		forEachBound(control, function(action, _) removeKeys(action, keys));
+		#end
+	}	
+	#end
 	function removeKeyboard()
 	{
 		for (action in this.digitalActions)
