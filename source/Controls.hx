@@ -382,7 +382,6 @@ class Controls extends FlxActionSet
 		setKeyboardScheme(scheme, false);
 	}
 	#end
-
 #if android
 	public var trackedinputsUI:Array<FlxActionInput> = [];
 	public var trackedinputsNOTES:Array<FlxActionInput> = [];
@@ -413,7 +412,7 @@ class Controls extends FlxActionSet
 	{
 		switch (DPad)
 		{
-		case UP_DOWN:
+			case UP_DOWN:
 				inline forEachBound(Control.UI_UP, (action, state) -> addbuttonUI(action, VirtualPad.buttonUp, state));
 				inline forEachBound(Control.UI_DOWN, (action, state) -> addbuttonUI(action, VirtualPad.buttonDown, state));
 			case LEFT_RIGHT:
@@ -438,9 +437,9 @@ class Controls extends FlxActionSet
 				inline forEachBound(Control.UI_LEFT, (action, state) -> addbuttonUI(action, VirtualPad.buttonLeft2, state));
 				inline forEachBound(Control.UI_RIGHT, (action, state) -> addbuttonUI(action, VirtualPad.buttonRight2, state));
 			case NONE: // do nothing
-		}
+	}
 
-switch (Action)
+		switch (Action)
 		{
 			case A:
 				inline forEachBound(Control.ACCEPT, (action, state) -> addbuttonUI(action, VirtualPad.buttonA, state));
@@ -483,6 +482,7 @@ switch (Action)
 				inline forEachBound(Control.NOTE_RIGHT, (action, state) -> addbuttonNOTES(action, VirtualPad.buttonRight2, state));
 			case NONE: // do nothing
 		}
+
 		switch (Action)
 		{
 			case A:
@@ -570,10 +570,8 @@ switch (Action)
 	}
 
 	/**
-	 * Calls a function passing each action bound by the specified control
-	 * @param control
-	 * @param func
-	 * @return ->Void)
+	 * Sets all actions that pertain to the binder to trigger when the supplied keys are used.
+	 * If binder is a literal you can inline this
 	 */
 	function forEachBound(control:Control, func:FlxActionDigital->FlxInputState->Void)
 	{
@@ -722,7 +720,22 @@ switch (Action)
 		forEachBound(control, function(action, state) addKeys(action, copyKeys, state));
 		#end
 	}
+
 	
+	public function unbindKeys(control:Control, keys:Array<FlxKey>)
+	{
+		var copyKeys:Array<FlxKey> = keys.copy();
+		for (i in 0...copyKeys.length) {
+			if(i == NONE) copyKeys.remove(i);
+		}
+
+		#if (haxe >= "4.0.0")
+		inline forEachBound(control, (action, _) -> removeKeys(action, copyKeys));
+		#else
+		forEachBound(control, function(action, _) removeKeys(action, copyKeys));
+		#end
+	}
+
 #else
 
 	public function bindKeys(control:Control, keys:Array<FlxKey>)
@@ -742,21 +755,7 @@ switch (Action)
 		forEachBound(control, function(action, _) removeKeys(action, keys));
 		#end
 	}	
-	#end
-	public function unbindKeys(control:Control, keys:Array<FlxKey>)
-	{
-		var copyKeys:Array<FlxKey> = keys.copy();
-		for (i in 0...copyKeys.length) {
-			if(i == NONE) copyKeys.remove(i);
-		}
-
-		#if (haxe >= "4.0.0")
-		inline forEachBound(control, (action, _) -> removeKeys(action, copyKeys));
-		#else
-		forEachBound(control, function(action, _) removeKeys(action, copyKeys));
-		#end
-	}
-
+	#end		
 	inline static function addKeys(action:FlxActionDigital, keys:Array<FlxKey>, state:FlxInputState)
 	{
 		for (key in keys)
