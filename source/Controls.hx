@@ -382,57 +382,8 @@ class Controls extends FlxActionSet
 		setKeyboardScheme(scheme, false);
 	}
 	#end
-	
-		
-		
-
-Pulls
-Issues
-Codespaces
-Marketplace
-Explore
- 
-@gabzsa 
-justaguy6
-/
-Classified-Source-Public
-Public template
-forked from Ash-Stat-SYS/Classified-Source-Public
-Fork your own copy of justaguy6/Classified-Source-Public
-Code
-Pull requests
-Actions
-Projects
-Security
-Insights
-Update Controls.hx
- main
-@justaguy6
-justaguy6 committed 3 weeks ago 
-1 parent c052aff
-commit f78643c
-Showing 1 changed file with 159 additions and 10 deletions.
-  169  
-source/Controls.hx
-Comment on this file
-@@ -10,7 +10,11 @@ import flixel.input.actions.FlxActionSet;
-import flixel.input.gamepad.FlxGamepadButton;
-import flixel.input.gamepad.FlxGamepadInputID;
-import flixel.input.keyboard.FlxKey;
 
 #if android
-import android.flixel.FlxButton;
-import android.flixel.FlxHitbox;
-import android.flixel.FlxVirtualPad;
-#end
-#if (haxe >= "4.0.0")
-enum abstract Action(String) to String from String
-{
-@@ -379,6 +383,137 @@ class Controls extends FlxActionSet
-	}
-	#end
-
-	#if android
 	public var trackedinputsUI:Array<FlxActionInput> = [];
 	public var trackedinputsNOTES:Array<FlxActionInput> = [];
 
@@ -462,7 +413,7 @@ enum abstract Action(String) to String from String
 	{
 		switch (DPad)
 		{
-			case UP_DOWN:
+		case UP_DOWN:
 				inline forEachBound(Control.UI_UP, (action, state) -> addbuttonUI(action, VirtualPad.buttonUp, state));
 				inline forEachBound(Control.UI_DOWN, (action, state) -> addbuttonUI(action, VirtualPad.buttonDown, state));
 			case LEFT_RIGHT:
@@ -489,7 +440,7 @@ enum abstract Action(String) to String from String
 			case NONE: // do nothing
 		}
 
-		switch (Action)
+switch (Action)
 		{
 			case A:
 				inline forEachBound(Control.ACCEPT, (action, state) -> addbuttonUI(action, VirtualPad.buttonA, state));
@@ -532,7 +483,6 @@ enum abstract Action(String) to String from String
 				inline forEachBound(Control.NOTE_RIGHT, (action, state) -> addbuttonNOTES(action, VirtualPad.buttonRight2, state));
 			case NONE: // do nothing
 		}
-
 		switch (Action)
 		{
 			case A:
@@ -562,7 +512,7 @@ enum abstract Action(String) to String from String
 			}
 		}
 	}
-	#end	
+	#end
 	override function update()
 	{
 		super.update();
@@ -772,7 +722,27 @@ enum abstract Action(String) to String from String
 		forEachBound(control, function(action, state) addKeys(action, copyKeys, state));
 		#end
 	}
+	
+#else
 
+	public function bindKeys(control:Control, keys:Array<FlxKey>)
+	{
+		#if (haxe >= "4.0.0")
+		inline forEachBound(control, (action, state) -> addKeys(action, keys, state));
+		#else
+		forEachBound(control, function(action, state) addKeys(action, keys, state));
+		#end
+	}
+
+	public function unbindKeys(control:Control, keys:Array<FlxKey>)
+	{
+		#if (haxe >= "4.0.0")
+		inline forEachBound(control, (action, _) -> removeKeys(action, keys));
+		#else
+		forEachBound(control, function(action, _) removeKeys(action, keys));
+		#end
+	}	
+	#end
 	public function unbindKeys(control:Control, keys:Array<FlxKey>)
 	{
 		var copyKeys:Array<FlxKey> = keys.copy();
@@ -906,26 +876,7 @@ enum abstract Action(String) to String from String
 		}
 		#end
 	}
-#else
 
-	public function bindKeys(control:Control, keys:Array<FlxKey>)
-	{
-		#if (haxe >= "4.0.0")
-		inline forEachBound(control, (action, state) -> addKeys(action, keys, state));
-		#else
-		forEachBound(control, function(action, state) addKeys(action, keys, state));
-		#end
-	}
-
-	public function unbindKeys(control:Control, keys:Array<FlxKey>)
-	{
-		#if (haxe >= "4.0.0")
-		inline forEachBound(control, (action, _) -> removeKeys(action, keys));
-		#else
-		forEachBound(control, function(action, _) removeKeys(action, keys));
-		#end
-	}	
-	#end
 	function removeKeyboard()
 	{
 		for (action in this.digitalActions)
