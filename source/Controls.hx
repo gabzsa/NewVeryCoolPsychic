@@ -385,7 +385,7 @@ class Controls extends FlxActionSet
 	
 		
 		
-Search or jump to…
+
 Pulls
 Issues
 Codespaces
