@@ -239,10 +239,9 @@ class Paths
 			return File.getContent(mods(key));
 		#end
 
-		
-			
+		#if sys
+		#if desktop
 			return File.getContent(getPreloadPath(key));
-
 		if (currentLevel != null)
 		{
 			var levelPath:String = '';
