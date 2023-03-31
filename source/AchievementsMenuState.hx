@@ -70,7 +70,7 @@ class AchievementsMenuState extends MusicBeatState
 		descText.borderSize = 2.4;
 		add(descText);
 		changeSelection();
-
+                addVirtualPad(LEFT_FULL, A_B);
 		super.create();
 	}
 
